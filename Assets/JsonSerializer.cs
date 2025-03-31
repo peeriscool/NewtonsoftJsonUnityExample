@@ -36,7 +36,6 @@ public static class JSONSerializer
     /// <param name="path">The full path to the JSON file (including filename)</param>
     /// <returns>Deserialized object of type T, or null if failed</returns>
     static string path = Application.persistentDataPath;
-
     public static T Load<T>(string filename) where T : class
     {
         string fullpath = path;
@@ -44,7 +43,7 @@ public static class JSONSerializer
         {
             //make sure we add the .json extention
             if (!filename.EndsWith(".json")) filename += ".json";
-            fullpath = Path.GetFullPath( Path.Combine(Application.persistentDataPath, filename));
+            fullpath = Path.Combine(path, filename);
             Debug.Log(fullpath);
             //if (!FileExists(fullpath))
             //{
@@ -160,9 +159,10 @@ public static class JSONSerializer
     /// <returns></returns>
     public static bool FileExists(string filename)
     {
-     //not allowed because linux android etc uses \ instead of / use path.combine
-      //  if (!filename.StartsWith('/')) filename = '/' + filename;
-        if (File.Exists(path + filename))
+        //not allowed because linux android etc uses \ instead of / use path.combine
+        //  if (!filename.StartsWith('/')) filename = '/' + filename;
+        string fullpath = Path.Combine(path, filename);
+        if (File.Exists(fullpath))
         {
             return true;
         }
@@ -180,4 +180,18 @@ public static class JSONSerializer
        
         else Debug.LogWarning("We don't have a valid path! " + path);
     }
+}
+public class JsonHeader
+{
+    public int Version;
+    public string Lastsaved;
+    public Dictionary<string, object> Data; //blackboard data
+
+    public JsonHeader(Dictionary<string, object> data, int version = 1)
+    {
+        Version = version;
+        Lastsaved = System.DateTime.UtcNow.ToString("o"); // ISO 8601
+        Data = data;
+    }
+
 }

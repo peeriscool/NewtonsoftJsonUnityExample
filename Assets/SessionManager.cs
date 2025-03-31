@@ -22,16 +22,18 @@ using System;
 ///         #endregion
 ///         
 /// </summary>
-public class DemoScript : MonoBehaviour
+public class SessionManager : MonoBehaviour
 {
-    [SerializeField]
-    private bool Ismandatory; //if true disable sumbit button until data has been given
+    //[SerializeField]
+    //private bool Ismandatory; //if true disable sumbit button until data has been given
+
+    [SerializeField] private string saveFileName = "FormData.json";
 
     private void Start()
     {
         //explain in the console what we can do
-        Debug.Log("Use form to Save and load data from/To Json");
-        Data_Available("DefaultFileName");
+        Debug.Log("Use form to Save and load data from / To Json");
+        Data_Available(saveFileName);
     }
     private String GetDate()
     {
@@ -63,31 +65,31 @@ public class DemoScript : MonoBehaviour
         if (Math.Abs(slider.value % 1) < Double.Epsilon) //value is an integer
         { 
          value = (int) slider.value;
-        Blackboard.Instance.SetValue(slider.name, value);
+        Blackboard.SetValue(slider.name, value);
         }
         else
         {
           decimal number = Math.Round((decimal)slider.value, 4); //rounding to 4 decimals, design choice not yet substantiated
-          Blackboard.Instance.SetValue<decimal>(slider.name, number);
+          Blackboard.SetValue<decimal>(slider.name, number);
         }
        
     }
     ///<Summary> sets TMP_Text String to blackboard (Key = TMP_Text.name)</Summary>
     public void OnValueChanged_String(TMP_Text text)
     {
-        Blackboard.Instance.SetValue<string>(text.name, text.text);
+        Blackboard.SetValue<string>(text.name, text.text);
     }
     #endregion
     #region //---------------------------------------------------------------------------blackboard to JsonSerializer methods-----------------------------------------------------------\\
     //<Summary>confirms we want to send data from blackboard to json </Summary>
     public void SumbitData()
     {
-        if (Data_Available("DefaultFileName"))
+        if (Data_Available(saveFileName))
         {
             //if we gots data in the blackboard save it to json
             if(true)
             {
-                SaveToJson("DefaultFileName");
+                SaveToJson(saveFileName);
                // JSONSerializer.Save(Blackboard.Instance.GetData(), "DefaultFileName");
             }
             //open file and update values
@@ -96,8 +98,8 @@ public class DemoScript : MonoBehaviour
         else
         {
             //make new savefile and put it in there.
-            SaveToJson("DefaultFileName");
-            JSONSerializer.Save(Blackboard.Instance.GetData(), "DefaultFileName");
+            SaveToJson(saveFileName);
+            JSONSerializer.Save(Blackboard.GetData(), saveFileName);
         }
       
       
@@ -105,11 +107,11 @@ public class DemoScript : MonoBehaviour
     ///<Summary> saves all data in the blackboard </Summary>
     private void SaveToJson(string filename)
     {
-      JSONSerializer.Save(Blackboard.Instance.GetData(), filename);
+      JSONSerializer.Save(Blackboard.GetData(), filename);
     }
     public void Loadsaveddata(TMP_Text textloc)
     {
-        Dictionary<string, object> dic = JSONSerializer.Load<Dictionary<string, object>>("DefaultFileName");
+        Dictionary<string, object> dic = JSONSerializer.Load<Dictionary<string, object>>(saveFileName);
         Debug.Log(dic.Values.Count);
         // Blackboard.Instance.SetValue();
 
