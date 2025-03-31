@@ -1,0 +1,37 @@
+﻿Old Demo script update
+
+ //yuck put this in metohds please
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            // Code way of entering data, using form for now
+            // Blackboard.Instance.SetValue("value",value);
+            // Blackboard.Instance.SetValue<string>("text", myText.text);
+            SaveToJson();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //enter data
+            Debug.Log( Blackboard.Instance.GetValue<int>("value"));
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            //enter data
+            Debug.Log(Blackboard.Instance.GetValue<string>("text"));
+        }
+        if (Input.GetKeyDown(KeyCode.RightShift))
+        {
+            //enter data
+            Blackboard.Instance.SetValue<string>("text","TestText");
+        }
+        //gives error
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            JSONSerializer.AppendDataToFile(DateTime.Now.ToString());
+        }
+
+
+        Json convert example
+          // string json = JsonUtility.FromJson<T>(File.ReadAllText(fullpath)) as string;
+
+          get type om data typen op te vragen blijkbaar is een decimal opgeslagen als een double :o   lang leven reflection :D
+             // Debug.Log(dic["ValueSlider"].GetType());
