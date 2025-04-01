@@ -35,3 +35,41 @@
 
           get type om data typen op te vragen blijkbaar is een decimal opgeslagen als een double :o   lang leven reflection :D
              // Debug.Log(dic["ValueSlider"].GetType());
+
+
+             ye old load functions
+                 /// <summary>
+    /// returns class object From File.Read <br></br>
+    /// path includes file name
+    /// </summary>
+    /// <typeparam name="T">Class type that gets returned</typeparam>
+    /// <param name="Path">Location of file to read</param>
+    /// 
+    //public static T Load<T>(string Path) where T : class
+    //{
+    //    if (PathExists(Path))
+    //    {
+    //        return JsonConvert.DeserializeObject<T>(File.ReadAllText(Path));
+    //       // return JsonUtility.FromJson<T>(File.ReadAllText(Path));
+    //    }
+    //    //lets tell we didnt find the filepath
+    //    Debug.LogWarning("Json couldn't find the path: " + Path);
+    //    return default; //default(T)
+    //}
+
+    /// <summary>
+    /// returns class object From persistentDataPath <br></br>
+    /// path excludes file name
+    /// </summary>
+    /// <typeparam name="T">Class type that gets returned</typeparam>
+    /// <param name="Path">Location of file to read</param>
+    //public static T Load<T>(string Path, string filename) where T : class
+    //{
+    //    if (PathExists(Path))
+    //    {
+    //        return JsonConvert.DeserializeObject<T>(File.ReadAllText(Path + filename));
+
+    //        //  return JsonUtility.FromJson<T>(Application.persistentDataPath + filename);
+    //    }
+    //    return default;
+    //}

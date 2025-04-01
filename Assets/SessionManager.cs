@@ -32,23 +32,33 @@ public class SessionManager : MonoBehaviour
     private void Start()
     {
         //explain in the console what we can do
-        Debug.Log("Use form to Save and load data from / To Json");
+        Debug.Log($"Files for writing = {saveFileName}");
         Data_Available(saveFileName);
     }
-    private String GetDate()
+    private void Update()
     {
-        return DateTime.Today.ToString();
-    }
-    private String GetTime()
-    {
-        return DateTime.Now.ToString();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //enter data
+            Quaternion Rotation= GameObject.Find("DataObject").gameObject.transform.rotation;
+            Vector3 position = GameObject.Find("DataObject").gameObject.transform.position;
+            Blackboard.SetValue<Vector3>("Myposition",position);
+            Blackboard.SetValue<Quaternion>("Myrotation", Rotation);
+
+            JSONSerializer.Save<Dictionary<string,object>>(Blackboard.GetData(), saveFileName, 0);
+            Debug.Log("saved");
+        }
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            JSONSerializer.AppendDataToFile("Identifiername","Ik wil er ook bij!",saveFileName);
+        }
     }
     private bool Data_Available(string filename)
     {
        // if (Blackboard.Instance.GetData() != null) //wil always exist therfore we aren't able to write
        if(JSONSerializer.FileExists(filename))
         {
-            //we are not aloud to create a new Json file use the existing!
+            //we are not allowed to create a new Json file use the existing!
             Debug.Log("Earlier data was found!");
             Debug.Log(Application.persistentDataPath.ToString());
             //Searh for the date of the data and display in console
@@ -72,7 +82,6 @@ public class SessionManager : MonoBehaviour
           decimal number = Math.Round((decimal)slider.value, 4); //rounding to 4 decimals, design choice not yet substantiated
           Blackboard.SetValue<decimal>(slider.name, number);
         }
-       
     }
     ///<Summary> sets TMP_Text String to blackboard (Key = TMP_Text.name)</Summary>
     public void OnValueChanged_String(TMP_Text text)
@@ -93,7 +102,6 @@ public class SessionManager : MonoBehaviour
                // JSONSerializer.Save(Blackboard.Instance.GetData(), "DefaultFileName");
             }
             //open file and update values
-
         }
         else
         {
@@ -101,8 +109,6 @@ public class SessionManager : MonoBehaviour
             SaveToJson(saveFileName);
             JSONSerializer.Save(Blackboard.GetData(), saveFileName);
         }
-      
-      
     }
     ///<Summary> saves all data in the blackboard </Summary>
     private void SaveToJson(string filename)
@@ -114,7 +120,6 @@ public class SessionManager : MonoBehaviour
         Dictionary<string, object> dic = JSONSerializer.Load<Dictionary<string, object>>(saveFileName);
         Debug.Log(dic.Values.Count);
         // Blackboard.Instance.SetValue();
-
         //  Dictionary<string,object> dic = JSONSerializer.Load<Dictionary<string, object>>("DefaultFileName");
          string dictext = dic["Text"] as string;
          textloc.text = dictext;
